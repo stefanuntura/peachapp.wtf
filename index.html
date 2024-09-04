@@ -28,8 +28,8 @@
             height: 100%;
             width: 100%;
             background: url('https://raw.githubusercontent.com/stefanuntura/peachapp.wtf/main/peach-logo.jpg') no-repeat center center;
-            background-size: contain;
-            z-index: -1;
+            background-size: contain; /* Keeps the aspect ratio */
+            z-index: -1; /* Send background image behind content */
         }
         nav {
             position: absolute;
@@ -91,77 +91,64 @@
 </head>
 <body>
     <nav>
-        <a href="#home" class="nav-link" data-section="home">Home</a>
-        <a href="#terms" class="nav-link" data-section="terms">Terms and Conditions</a>
-        <a href="#privacy" class="nav-link" data-section="privacy">Privacy Policy</a>
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#terms" class="nav-link">Terms and Conditions</a>
+        <a href="#privacy" class="nav-link">Privacy Policy</a>
     </nav>
 
     <div class="container" id="home">
         <h1>Welcome to Peach</h1>
         <p>The fun and safe social media app for teenagers!</p>
-        <a href="#terms" class="button nav-link" data-section="terms">Terms & Conditions</a>
-        <a href="#privacy" class="button nav-link" data-section="privacy">Privacy Policy</a>
+        <a href="#terms" class="button nav-link">Terms & Conditions</a>
+        <a href="#privacy" class="button nav-link">Privacy Policy</a>
     </div>
 
     <div class="container hidden" id="terms">
         <h1>Terms and Conditions</h1>
         <div class="box" id="terms-box">
-            <p>Your very long terms and conditions go here...</p>
-            <p class="hidden" id="more-terms">
-                <!-- Long text content here -->
-                [Your long terms and conditions text goes here...]
-            </p>
-            <span class="show-more" id="terms-show-more">Show more...</span>
+            <!-- Terms text will be dynamically loaded here -->
+            <p>Loading terms...</p>
         </div>
-        <a href="#home" class="button nav-link" data-section="home">Back to Home</a>
+        <a href="#home" class="button nav-link">Back to Home</a>
     </div>
 
     <div class="container hidden" id="privacy">
         <h1>Privacy Policy</h1>
         <div class="box" id="privacy-box">
-            <p>Your very long privacy policy text goes here...</p>
-            <p class="hidden" id="more-privacy">
-                <!-- Long privacy policy text here -->
-                [Your long privacy policy text goes here...]
-            </p>
-            <span class="show-more" id="privacy-show-more">Show more...</span>
+            <!-- Privacy Policy text will be dynamically loaded here -->
+            <p>Loading privacy policy...</p>
         </div>
-        <a href="#home" class="button nav-link" data-section="home">Back to Home</a>
+        <a href="#home" class="button nav-link">Back to Home</a>
     </div>
 
     <script>
+        // Function to fetch the content from external text files
+        function loadContent(url, elementId) {
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(elementId).innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching the content:', error);
+                    document.getElementById(elementId).innerHTML = 'Error loading content.';
+                });
+        }
+
+        // Load content when the document is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContent('terms.txt', 'terms-box');   // Load Terms content
+            loadContent('privacy.txt', 'privacy-box'); // Load Privacy content
+        });
+
         // Switch between sections
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(event) {
                 event.preventDefault(); // Prevent the page from jumping
-                const targetSection = this.getAttribute('data-section');
+                const targetSection = this.getAttribute('href').replace('#', '');
                 document.querySelectorAll('.container').forEach(section => section.classList.add('hidden'));
                 document.getElementById(targetSection).classList.remove('hidden');
             });
-        });
-
-        // Terms show more functionality
-        document.getElementById('terms-show-more').addEventListener('click', function() {
-            const moreText = document.getElementById('more-terms');
-            if (moreText.classList.contains('hidden')) {
-                moreText.classList.remove('hidden');
-                this.innerText = 'Show less...';
-            } else {
-                moreText.classList.add('hidden');
-                this.innerText = 'Show more...';
-            }
-        });
-
-        // Privacy show more functionality
-        document.getElementById('privacy-show-more').addEventListener('click', function() {
-            const moreText = document.getElementById('more-privacy');
-            if (moreText.classList.contains('hidden')) {
-                moreText.classList.remove('hidden');
-                this.innerText = 'Show less...';
-            } else {
-                moreText.classList.add('hidden');
-                this.innerText = 'Show more...';
-            }
         });
     </script>
 </body>
