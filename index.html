@@ -48,6 +48,9 @@
             background-color: rgba(0, 0, 0, 0.5); /* Transparent background for text boxes */
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Soft shadow for better visibility */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1 {
             font-size: 48px;
@@ -67,7 +70,8 @@
             border-radius: 5px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
             font-size: 18px;
-            margin: 10px;
+            margin-top: 20px; /* Ensures spacing above the button */
+            align-self: center; /* Ensures the button is centered */
         }
         .box {
             background-color: rgba(255, 255, 255, 0.1); /* Lighter text box */
@@ -78,6 +82,7 @@
             overflow-y: auto;
             font-size: 18px;
             line-height: 1.8;
+            width: 100%;
         }
         .hidden {
             display: none;
