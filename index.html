@@ -16,9 +16,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url('https://raw.githubusercontent.com/stefanuntura/peachapp.wtf/main/peach-logo.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: rgba(0, 0, 0, 0.8);
             color: white;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: url('https://raw.githubusercontent.com/stefanuntura/peachapp.wtf/main/peach-logo.jpg') no-repeat center center;
+            background-size: contain;
+            z-index: -1;
         }
         nav {
             position: absolute;
@@ -55,42 +66,102 @@
             text-decoration: none;
             border-radius: 5px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            margin: 10px;
+        }
+        .box {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .show-more {
+            cursor: pointer;
+            color: #FF7F50;
+            font-size: 18px;
+            margin-top: 10px;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <nav>
-        <a href="#home">Home</a>
-        <a href="#terms">Terms and Conditions</a>
-        <a href="#privacy">Privacy Policy</a>
+        <a href="#home" class="nav-link" data-section="home">Home</a>
+        <a href="#terms" class="nav-link" data-section="terms">Terms and Conditions</a>
+        <a href="#privacy" class="nav-link" data-section="privacy">Privacy Policy</a>
     </nav>
 
     <div class="container" id="home">
         <h1>Welcome to Peach</h1>
         <p>The fun and safe social media app for teenagers!</p>
-        <a href="#terms" class="button">Terms & Conditions</a>
-        <a href="#privacy" class="button">Privacy Policy</a>
+        <a href="#terms" class="button nav-link" data-section="terms">Terms & Conditions</a>
+        <a href="#privacy" class="button nav-link" data-section="privacy">Privacy Policy</a>
     </div>
 
-    <div class="container" id="terms" style="display: none;">
+    <div class="container hidden" id="terms">
         <h1>Terms and Conditions</h1>
-        <p>Here you can add the text of your Terms and Conditions. Make sure users understand your rules!</p>
-        <a href="#home" class="button">Back to Home</a>
+        <div class="box" id="terms-box">
+            <p>Your very long terms and conditions go here...</p>
+            <p class="hidden" id="more-terms">
+                <!-- Long text content here -->
+                [Your long terms and conditions text goes here...]
+            </p>
+            <span class="show-more" id="terms-show-more">Show more...</span>
+        </div>
+        <a href="#home" class="button nav-link" data-section="home">Back to Home</a>
     </div>
 
-    <div class="container" id="privacy" style="display: none;">
+    <div class="container hidden" id="privacy">
         <h1>Privacy Policy</h1>
-        <p>This is where your Privacy Policy text goes. Let users know how their data is handled.</p>
-        <a href="#home" class="button">Back to Home</a>
+        <div class="box" id="privacy-box">
+            <p>Your very long privacy policy text goes here...</p>
+            <p class="hidden" id="more-privacy">
+                <!-- Long privacy policy text here -->
+                [Your long privacy policy text goes here...]
+            </p>
+            <span class="show-more" id="privacy-show-more">Show more...</span>
+        </div>
+        <a href="#home" class="button nav-link" data-section="home">Back to Home</a>
     </div>
 
     <script>
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', function() {
-                document.querySelectorAll('.container').forEach(section => section.style.display = 'none');
-                const target = this.getAttribute('href').replace('#', '');
-                document.getElementById(target).style.display = 'block';
+        // Switch between sections
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the page from jumping
+                const targetSection = this.getAttribute('data-section');
+                document.querySelectorAll('.container').forEach(section => section.classList.add('hidden'));
+                document.getElementById(targetSection).classList.remove('hidden');
             });
+        });
+
+        // Terms show more functionality
+        document.getElementById('terms-show-more').addEventListener('click', function() {
+            const moreText = document.getElementById('more-terms');
+            if (moreText.classList.contains('hidden')) {
+                moreText.classList.remove('hidden');
+                this.innerText = 'Show less...';
+            } else {
+                moreText.classList.add('hidden');
+                this.innerText = 'Show more...';
+            }
+        });
+
+        // Privacy show more functionality
+        document.getElementById('privacy-show-more').addEventListener('click', function() {
+            const moreText = document.getElementById('more-privacy');
+            if (moreText.classList.contains('hidden')) {
+                moreText.classList.remove('hidden');
+                this.innerText = 'Show less...';
+            } else {
+                moreText.classList.add('hidden');
+                this.innerText = 'Show more...';
+            }
         });
     </script>
 </body>
